@@ -24,8 +24,34 @@ public class PassengerDaoImpl implements PassengerDao {
 
 	@Override
 	public Passenger createPassenger(Passenger passenger) {
-		entityManager.persist(passenger);
+		try {
+			entityManager.persist(passenger);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return passenger;
+	}
+
+	@Override
+	public Passenger getPassenger(String id) {
+		Passenger p = null;
+		try {
+			p = entityManager.find(Passenger.class, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return p;
+	}
+
+	@Override
+	public boolean deletePassenger(String id) {
+		Passenger p = getPassenger(id);
+		if(p!=null){
+			entityManager.remove(p);
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 }

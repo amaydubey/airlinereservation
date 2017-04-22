@@ -16,5 +16,17 @@ public interface PassengerDao {
 	 * @return Newly created passenger
 	 */
 	Passenger createPassenger(Passenger passenger);
+	
+	/**
+	 * @param id
+	 * @return Requested Passenger
+	 */
+	Passenger getPassenger(String id);
+
+	/**
+	 * @param id
+	 * @return True if passenger is deleted
+	 */
+	boolean deletePassenger(String id);
 
 }

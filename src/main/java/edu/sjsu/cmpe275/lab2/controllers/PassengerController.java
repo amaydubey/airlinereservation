@@ -34,7 +34,7 @@ public class PassengerController {
 	 * @param model
 	 * @return Passenger which is created
 	 */
-	@RequestMapping(method = RequestMethod.POST, produces = { "application/json" })
+	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Passenger> createPassenger(@RequestParam("firstname") String firstname,
 			@RequestParam("lastname") String lastname, @RequestParam("age") String age,
@@ -79,7 +79,35 @@ public class PassengerController {
 		if (passDao.deletePassenger(id))
 			return ResponseEntity.ok(HttpStatus.OK);
 		else
-			return ResponseEntity.ok(HttpStatus.NOT_FOUND); 
+			return ResponseEntity.ok(HttpStatus.NOT_FOUND);
+	}
+
+	/**
+	 * @param id 
+	 * @param firstname
+	 * @param lastname
+	 * @param age
+	 * @param gender
+	 * @param phone
+	 * @param model
+	 * @return Passenger which is updated
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Passenger> updatePassenger(@PathVariable("id") String id,
+			@RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname,
+			@RequestParam("age") String age, @RequestParam("gender") String gender,
+			@RequestParam("phone") String phone) {
+
+		Passenger p = new Passenger();
+		p.setId(id);
+		p.setFirstname(firstname);
+		p.setLastname(lastname);
+		p.setAge(Integer.parseInt(age));
+		p.setGender(gender);
+		p.setPhone(phone);
+		Passenger p1 = passDao.updatePassenger(p);
+		return ResponseEntity.ok(p1);
 	}
 
 }

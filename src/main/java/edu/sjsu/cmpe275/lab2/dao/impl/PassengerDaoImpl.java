@@ -23,13 +23,13 @@ public class PassengerDaoImpl implements PassengerDao {
 	private EntityManager entityManager;
 
 	@Override
-	public Passenger createPassenger(Passenger passenger) {
+	public Passenger createPassenger(Passenger p) {
 		try {
-			entityManager.persist(passenger);
+			entityManager.persist(p);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return passenger;
+		return p;
 	}
 
 	@Override
@@ -52,6 +52,21 @@ public class PassengerDaoImpl implements PassengerDao {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public Passenger updatePassenger(Passenger p) {
+		try {
+			Passenger p1 = getPassenger(p.getId());
+			if(p1!=null){
+				entityManager.merge(p);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return p;
 	}
 
 }

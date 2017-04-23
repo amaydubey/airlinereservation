@@ -29,4 +29,10 @@ public interface PassengerDao {
 	 */
 	boolean deletePassenger(String id);
 
+	/**
+	 * @param p
+	 * @return Updated passenger
+	 */
+	Passenger updatePassenger(Passenger p);
+
 }

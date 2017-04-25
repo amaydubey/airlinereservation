@@ -15,14 +15,8 @@ import javax.persistence.Table;
  */
 
 @Embeddable
-//@Table(name = "plane")
 public class Plane {
-	
-//	@Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Basic(optional = false)
-//    @Column(name = "planeId",unique=true, nullable = false)
-//	private String planeId;
+
 	
 	@Column(name = "capacity")
 	private int capacity;

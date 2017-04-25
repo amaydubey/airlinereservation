@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.sjsu.cmpe275.lab2.dao.FlightDao;
 import edu.sjsu.cmpe275.lab2.models.Flight;
+import edu.sjsu.cmpe275.lab2.models.Passenger;
 
 @Repository
 @Transactional
@@ -25,6 +26,30 @@ public class FlightDaoImpl implements FlightDao{
 			e.printStackTrace();
 		}
 		return flight;
+	}
+
+	@Override
+	public Flight getFlight(String flightNumber) {
+		// TODO Auto-generated method stub
+		Flight flight = null;
+		try {
+			flight = entityManager.find(Flight.class, flightNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flight;
+	}
+
+	@Override
+	public boolean deleteFlight(String flightNumber) {
+		// TODO Auto-generated method stub
+		Flight flt = getFlight(flightNumber);
+		if(flt!=null){
+			entityManager.remove(flt);
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 

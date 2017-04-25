@@ -25,13 +25,15 @@ import javax.persistence.Table;
 @Table(name = "flight")
 public class Flight {
 	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "flightId",unique=true, nullable = false)
-	private int flightId;
+//	@Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Basic(optional = false)
+//    @Column(name = "flightId",unique=true, nullable = false)
+//	private int flightId;
 	
-    @Column(name = "flightNo")
+	@Id
+    @Basic(optional = false)
+	@Column(name = "flightNo",unique=true, nullable = false)
 	private String number; // Each flight has a unique flight number.
 	
 	@Column(name = "price")
@@ -131,7 +133,7 @@ public class Flight {
 	public String getDepartureTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		String departure = sdf.format(departureTime);
-		System.out.println(departure);
+//		System.out.println(departure);
 		return departure;
 	}
 
@@ -153,7 +155,7 @@ public class Flight {
 	public String getArrivalTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		String arrival = sdf.format(arrivalTime);
-		System.out.println(arrival);
+//		System.out.println(arrival);
 		return arrival;
 	}
 

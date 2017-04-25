@@ -1,16 +1,46 @@
 package edu.sjsu.cmpe275.lab2.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 
 /**
  * @author amayd
  *
  */
+@Entity
+@Table(name = "flight")
 public class Flight {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "flightId",unique=true, nullable = false)
+	private int flightId;
+	
+    @Column(name = "flightNo")
 	private String number; // Each flight has a unique flight number.
+	
+	@Column(name = "price")
 	private int price;
+	
+	@Column(name = "source")
 	private String from;
+	
+	@Column(name = "destination")
 	private String to;
 
 	/*
@@ -18,12 +48,22 @@ public class Flight {
 	 * 2017-03-22-19 The system only needs to supports PST.You can ignore other
 	 * time zones.
 	 */
+	@Column(name = "departureTime")
 	private Date departureTime;
+	
+	@Column(name = "arrivalTime")
 	private Date arrivalTime;
+	
+	@Column(name = "seatsLeft")
 	private int seatsLeft;
+	
+	@Column(name = "description")
 	private String description;
+	
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name="planeId")
 	private Plane plane; // Embedded
-	private List<Passenger> passengers;
+//	private List<Passenger> passengers;
 
 	/**
 	 * @return No of the flight
@@ -37,6 +77,7 @@ public class Flight {
 	 */
 	public void setNumber(String number) {
 		this.number = number;
+//		System.out.println(number);
 	}
 
 	/**
@@ -51,6 +92,7 @@ public class Flight {
 	 */
 	public void setPrice(int price) {
 		this.price = price;
+//		System.out.println(price);
 	}
 
 	/**
@@ -65,6 +107,7 @@ public class Flight {
 	 */
 	public void setFrom(String from) {
 		this.from = from;
+//		System.out.println(from);
 	}
 
 	/**
@@ -79,34 +122,49 @@ public class Flight {
 	 */
 	public void setTo(String to) {
 		this.to = to;
+//		System.out.println(to);
 	}
 
 	/**
 	 * @return Departure time of the flight
 	 */
-	public Date getDepartureTime() {
-		return departureTime;
+	public String getDepartureTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
+		String departure = sdf.format(departureTime);
+		System.out.println(departure);
+		return departure;
 	}
 
 	/**
 	 * @param departureTime
+	 * @throws ParseException 
 	 */
-	public void setDepartureTime(Date departureTime) {
-		this.departureTime = departureTime;
+	public void setDepartureTime(String departureTime) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
+		Date departure = sdf.parse(departureTime);
+		
+		this.departureTime = departure;
+//		System.out.println(departureTime);
 	}
 
 	/**
 	 * @return Arrival Time of the flight
 	 */
-	public Date getArrivalTime() {
-		return arrivalTime;
+	public String getArrivalTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
+		String arrival = sdf.format(arrivalTime);
+		System.out.println(arrival);
+		return arrival;
 	}
 
 	/**
 	 * @param arrivalTime
 	 */
-	public void setArrivalTime(Date arrivalTime) {
-		this.arrivalTime = arrivalTime;
+	public void setArrivalTime(String arrivalTime)throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
+		Date arrival = sdf.parse(arrivalTime);
+		this.arrivalTime = arrival;
+//		System.out.println(arrivalTime);
 	}
 
 	/**
@@ -121,6 +179,7 @@ public class Flight {
 	 */
 	public void setSeatsLeft(int seatsLeft) {
 		this.seatsLeft = seatsLeft;
+//		System.out.println(seatsLeft);
 	}
 
 	/**
@@ -135,6 +194,7 @@ public class Flight {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+//		System.out.println(description);
 	}
 
 	/**
@@ -149,19 +209,20 @@ public class Flight {
 	 */
 	public void setPlane(Plane plane) {
 		this.plane = plane;
+//		System.out.println(this.plane.getYearOfManufacture());
 	}
 
 	/**
 	 * @return List of the passengers of the flight
 	 */
-	public List<Passenger> getPassengers() {
-		return passengers;
-	}
-
-	/**
-	 * @param passengers
-	 */
-	public void setPassengers(List<Passenger> passengers) {
-		this.passengers = passengers;
-	}
+//	public List<Passenger> getPassengers() {
+//		return passengers;
+//	}
+//
+//	/**
+//	 * @param passengers
+//	 */
+//	public void setPassengers(List<Passenger> passengers) {
+//		this.passengers = passengers;
+//	}
 }

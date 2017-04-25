@@ -1,13 +1,39 @@
 package edu.sjsu.cmpe275.lab2.models;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * @author amayd
  *
  */
+
+@Embeddable
+//@Table(name = "plane")
 public class Plane {
+	
+//	@Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Basic(optional = false)
+//    @Column(name = "planeId",unique=true, nullable = false)
+//	private String planeId;
+	
+	@Column(name = "capacity")
 	private int capacity;
+	
+	@Column(name = "model")
     private String model; 
+	
+	@Column(name = "manufacturer")
     private String manufacturer;
+	
+	@Column(name = "yearOfManufacture")
     private int yearOfManufacture;
     
 	/**
@@ -21,6 +47,7 @@ public class Plane {
 	 */
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
+//		System.out.println(capacity);
 	}
 	/**
 	 * @return Model of the plane
@@ -33,6 +60,7 @@ public class Plane {
 	 */
 	public void setModel(String model) {
 		this.model = model;
+//		System.out.println(model);
 	}
 	/**
 	 * @return Manufacturer of the plane
@@ -45,6 +73,7 @@ public class Plane {
 	 */
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
+//		System.out.println(manufacturer);
 	}
 	/**
 	 * @return Year of Mfg of the plane
@@ -57,5 +86,6 @@ public class Plane {
 	 */
 	public void setYearOfManufacture(int yearOfManufacture) {
 		this.yearOfManufacture = yearOfManufacture;
+//		System.out.println(yearOfManufacture);
 	}
 }

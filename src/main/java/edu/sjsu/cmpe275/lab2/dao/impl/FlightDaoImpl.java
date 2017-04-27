@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.sjsu.cmpe275.lab2.dao.FlightDao;
 import edu.sjsu.cmpe275.lab2.models.Flight;
-import edu.sjsu.cmpe275.lab2.models.Passenger;
 
 @Repository
 @Transactional

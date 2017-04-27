@@ -1,13 +1,19 @@
 package edu.sjsu.cmpe275.lab2.models;
 
 
+import java.util.List;
+
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * @author amayd
@@ -32,6 +38,10 @@ public class Passenger {
 	private String gender;
 	@Column(name = "phone")
 	private String phone; // Phone numbers must be unique
+	
+	@OneToMany(mappedBy="passenger", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<Reservation> reservations;
 
 	/**
 	 * @return Id of the passenger
@@ -119,5 +129,19 @@ public class Passenger {
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	/**
+	 * @return the reservations
+	 */
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	/**
+	 * @param reservations the reservations to set
+	 */
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 }

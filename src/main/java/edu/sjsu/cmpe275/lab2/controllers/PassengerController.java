@@ -107,7 +107,9 @@ public class PassengerController {
 		p.setGender(gender);
 		p.setPhone(phone);
 		Passenger p1 = passDao.updatePassenger(p);
-		return ResponseEntity.ok(p1);
+		Passenger p2 = passDao.getPassenger(p1.getId());
+		System.out.println("in controller, reservation="+p2.getReservations());
+		return ResponseEntity.ok(p2);
 	}
 
 }

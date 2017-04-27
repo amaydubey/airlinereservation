@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.sjsu.cmpe275.lab2.dao.PassengerDao;
 import edu.sjsu.cmpe275.lab2.models.Passenger;
+import edu.sjsu.cmpe275.lab2.models.Reservation;
 
 /**
  * @author amayd
@@ -56,17 +57,21 @@ public class PassengerDaoImpl implements PassengerDao {
 
 	@Override
 	public Passenger updatePassenger(Passenger p) {
+		Passenger p1 = getPassenger(p.getId());
+		Passenger p2 = null;
 		try {
-			Passenger p1 = getPassenger(p.getId());
 			if(p1!=null){
 				entityManager.merge(p);
+				p2 = entityManager.find(Passenger.class, p1.getId());
+				System.out.println(p2.getReservations());
 			} else {
 				return null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return p;
+		
+		return p2;
 	}
 
 }

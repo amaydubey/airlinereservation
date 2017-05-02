@@ -56,17 +56,20 @@ public class PassengerDaoImpl implements PassengerDao {
 
 	@Override
 	public Passenger updatePassenger(Passenger p) {
+		Passenger p1 = getPassenger(p.getId());
+		p1.setAge(p.getAge());
+		p1.setFirstname(p.getFirstname());
+		p1.setLastname(p.getLastname());
+		p1.setGender(p.getGender());
+		p1.setPhone(p.getPhone());
 		try {
-			Passenger p1 = getPassenger(p.getId());
 			if(p1!=null){
-				entityManager.merge(p);
-			} else {
-				return null;
+				entityManager.merge(p1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return p;
+		return p1;
 	}
 
 }

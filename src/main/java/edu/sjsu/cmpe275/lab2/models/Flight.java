@@ -3,33 +3,22 @@ package edu.sjsu.cmpe275.lab2.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
+
 /**
- * @author amayd
+ * @author ashay
  *
  */
 @Entity
 @Table(name = "flight")
 public class Flight {
 	
-//	@Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Basic(optional = false)
-//    @Column(name = "flightId",unique=true, nullable = false)
-//	private int flightId;
 	
 	@Id
     @Basic(optional = false)
@@ -46,7 +35,7 @@ public class Flight {
 	private String to;
 
 	/*
-	 * Date format: yy-mm-dd-hh, do not include minutes and sceonds. Example:
+	 * Date format: yy-mm-dd-hh, do not include minutes and seconds. Example:
 	 * 2017-03-22-19 The system only needs to supports PST.You can ignore other
 	 * time zones.
 	 */
@@ -62,8 +51,6 @@ public class Flight {
 	@Column(name = "description")
 	private String description;
 	
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name="planeId")
 	private Plane plane; // Embedded
 //	private List<Passenger> passengers;
 
@@ -79,7 +66,6 @@ public class Flight {
 	 */
 	public void setNumber(String number) {
 		this.number = number;
-//		System.out.println(number);
 	}
 
 	/**
@@ -94,7 +80,6 @@ public class Flight {
 	 */
 	public void setPrice(int price) {
 		this.price = price;
-//		System.out.println(price);
 	}
 
 	/**
@@ -109,7 +94,6 @@ public class Flight {
 	 */
 	public void setFrom(String from) {
 		this.from = from;
-//		System.out.println(from);
 	}
 
 	/**
@@ -124,16 +108,14 @@ public class Flight {
 	 */
 	public void setTo(String to) {
 		this.to = to;
-//		System.out.println(to);
 	}
 
 	/**
-	 * @return Departure time of the flight
+	 * @return Departure time of the flight in desired format
 	 */
 	public String getDepartureTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		String departure = sdf.format(departureTime);
-//		System.out.println(departure);
 		return departure;
 	}
 
@@ -146,16 +128,14 @@ public class Flight {
 		Date departure = sdf.parse(departureTime);
 		
 		this.departureTime = departure;
-//		System.out.println(departureTime);
 	}
 
 	/**
-	 * @return Arrival Time of the flight
+	 * @return Arrival Time of the flight in desired format
 	 */
 	public String getArrivalTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		String arrival = sdf.format(arrivalTime);
-//		System.out.println(arrival);
 		return arrival;
 	}
 
@@ -166,7 +146,6 @@ public class Flight {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		Date arrival = sdf.parse(arrivalTime);
 		this.arrivalTime = arrival;
-//		System.out.println(arrivalTime);
 	}
 
 	/**
@@ -181,7 +160,6 @@ public class Flight {
 	 */
 	public void setSeatsLeft(int seatsLeft) {
 		this.seatsLeft = seatsLeft;
-//		System.out.println(seatsLeft);
 	}
 
 	/**
@@ -196,7 +174,6 @@ public class Flight {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-//		System.out.println(description);
 	}
 
 	/**
@@ -211,7 +188,6 @@ public class Flight {
 	 */
 	public void setPlane(Plane plane) {
 		this.plane = plane;
-//		System.out.println(this.plane.getYearOfManufacture());
 	}
 
 	/**

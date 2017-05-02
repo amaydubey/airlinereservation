@@ -1,7 +1,13 @@
 package edu.sjsu.cmpe275.lab2.controllers;
 
-import java.util.*;
 import java.text.*;
+
+
+
+import javax.swing.text.StringContent;
+
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,10 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.dao.FlightDao;
 import edu.sjsu.cmpe275.lab2.controllers.Response;
-//import edu.sjsu.cmpe275.lab2.dao.PlaneDao;
-import edu.sjsu.cmpe275.lab2.dao.PassengerDao;
 import edu.sjsu.cmpe275.lab2.models.Flight;
-import edu.sjsu.cmpe275.lab2.models.Passenger;
 //import edu.sjsu.cmpe275.lab2.models.Passenger;
 import edu.sjsu.cmpe275.lab2.models.Plane;
 
@@ -36,6 +39,21 @@ public class FlightController {
 	 * arrivalTime=DD&description=EE&capacity=GG&
 	 * model=HH&manufacturer=II&yearOfManufacture=1997
 	 */
+	/**
+	 * @param flightNumber
+	 * @param price
+	 * @param from
+	 * @param to
+	 * @param departureTime
+	 * @param arrivalTime
+	 * @param description
+	 * @param capacity
+	 * @param model
+	 * @param manufacturer
+	 * @param yearOfManufacture
+	 * @return flight object
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML_VALUE)
 	@ResponseBody
 	public ResponseEntity<Flight> createFlight(
@@ -50,15 +68,6 @@ public class FlightController {
 			@RequestParam("model") String model, 
 			@RequestParam("manufacturer") String manufacturer,
 			@RequestParam("yearOfManufacture") int yearOfManufacture) throws ParseException {
-
-//		System.out.println("dt - "+departureTime);
-//		System.out.println("at - "+arrivalTime);
-//		System.out.println(flightNumber);
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
-//		Date departure = sdf.parse(departureTime);
-//		Date arrival = sdf.parse(arrivalTime);
-//		System.out.println("depart - "+departure);
-//		System.out.println("arr - "+arrival);
 
 		
 		
@@ -80,17 +89,18 @@ public class FlightController {
 		p.setManufacturer(manufacturer);
 		p.setYearOfManufacture(yearOfManufacture);
 		
-//		Plane pln = plnDao.createPlane(p);
 		f.setPlane(p);
-//		System.out.println(p);
 		
 		Flight flt = fltDao.createFlight(f);
-//		System.out.println(flt);
 
 		
 		return ResponseEntity.ok(flt);
 	}	
 
+	/**
+	 * @param flightNumber
+	 * @return get flight with planes and passengers in XML
+	 */
 	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE, params = "xml")
 	public ResponseEntity<Flight> getFlightInXml(@PathVariable("flightNumber") String flightNumber) {
 		Flight flt = fltDao.getFlight(flightNumber);
@@ -98,18 +108,42 @@ public class FlightController {
 		
 	}
 	
-	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_XML_VALUE)
+	
+	/**
+	 * @param flightNumber
+	 * @return get flight with planes and passengers in JSON 
+	 */
+	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, params = "json")
+	public ResponseEntity<Flight> getFlightInJson(@PathVariable("flightNumber") String flightNumber) {
+		Flight flt = fltDao.getFlight(flightNumber);
+		return ResponseEntity.ok(flt);
+		
+	}
+	
+	/**
+	 * @param flightNumber
+	 * @return delete confirmation
+	 */
+	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deletePassenger(@PathVariable("flightNumber") String flightNumber) {
 		HttpHeaders httpHeaders= new HttpHeaders();
+		Response res = new Response();
+
 		if (fltDao.deleteFlight(flightNumber)){
 			httpHeaders.setContentType(MediaType.APPLICATION_XML);
 			String resp = "<Response> <code> 200 </code> <msg> Flight with number "+flightNumber+" is deleted successfully  </msg> </Response>";
 			return new ResponseEntity<String>(resp, httpHeaders, HttpStatus.OK);
 			
+			
+			
+
 		}
 		else{
 			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			return new ResponseEntity<String>("{\"BadRequest\": {\"code\": \"404\" , \"msg\" : \"Flight number not found\" } }", httpHeaders, HttpStatus.NOT_FOUND);		
+
+			String response = "{\"BadRequest\": {\"code\": \"404\" , \"msg\" : \"Flight number not found\" } }";
+			return new ResponseEntity<String>(response, httpHeaders, HttpStatus.NOT_FOUND);
+
 		}
 	}
 

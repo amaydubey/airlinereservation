@@ -20,7 +20,7 @@ import edu.sjsu.cmpe275.lab2.models.Reservation;
 @RestController
 @RequestMapping("/reservation")
 public class ReservationController {
-	
+
 	@Autowired
 	ReservationDao resDao;
 
@@ -33,21 +33,32 @@ public class ReservationController {
 	@ResponseBody
 	public ResponseEntity<Reservation> makeReservation(@RequestParam("passengerId") String passengerId,
 			@RequestParam("flightLists") String flightLists) {
-		Reservation r = null;
-		r = resDao.makeReservation(passengerId, flightLists);
+		Reservation r = resDao.makeReservation(passengerId, flightLists);
 		return ResponseEntity.ok(r);
 	}
-	
+
 	/**
-	 * @param passengerId
-	 * @param flightLists
-	 * @return The newly made reservation
+	 * @param number 
+	 * @return The requested reservation
 	 */
-	@RequestMapping(value="{number}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{number}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Reservation> getReservation(@PathVariable("number") String number) {
-		Reservation r = null;
-		r = resDao.getReservation(number);
+		Reservation r = resDao.getReservation(number);
+		return ResponseEntity.ok(r);
+	}
+
+	/**
+	 * @param number
+	 * @param flightsAdded
+	 * @param flightsRemoved
+	 * @return Updated Reservation
+	 */
+	@RequestMapping(value = "/{number}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Reservation> updateReservation(@PathVariable("number") String number,
+			@RequestParam("flightsAdded") String flightsAdded, @RequestParam("flightsRemoved") String flightsRemoved) {
+		Reservation r = resDao.updateReservation(number, flightsAdded, flightsRemoved);
 		return ResponseEntity.ok(r);
 	}
 

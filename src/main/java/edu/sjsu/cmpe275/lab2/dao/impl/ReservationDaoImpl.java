@@ -26,7 +26,7 @@ public class ReservationDaoImpl implements ReservationDao {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Override
 	public Reservation makeReservation(String passengerId, String flightLists) {
 		Flight f = null;
@@ -55,13 +55,51 @@ public class ReservationDaoImpl implements ReservationDao {
 	@Override
 	public Reservation getReservation(String number) {
 		Reservation r = null;
-		
-		try{
+
+		try {
 			r = entityManager.find(Reservation.class, number);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return r;
+	}
+
+	@Override
+	public Reservation updateReservation(String number, String flightsAdded, String flightsRemoved) {
+
+		Reservation r = getReservation(number);
+		if (r != null) {
+			int price = r.getPrice();
+			String[] flightsAddedArray = flightsAdded.split(",");
+			String[] flightsRemovedArray = flightsRemoved.split(",");
+			Flight f = null;
+			List<Flight> flightList = new ArrayList<Flight>();
+			try {
+				for (int i = 0; i < flightsAddedArray.length; i++) {
+					f = entityManager.find(Flight.class, flightsAddedArray[i]);
+					flightList.add(f);
+					price += f.getPrice();
+				}
+				for (int i = 0; i < flightsRemovedArray.length; i++) {
+					f = entityManager.find(Flight.class, flightsRemovedArray[i]);
+					flightList.remove(f);
+					price -= f.getPrice();
+				}
+				r.setFlights(flightList);
+				r.setPrice(price);
+				entityManager.persist(r);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return r;
+		}
+		return null;
+	}
+
+	@Override
+	public List<Reservation> searchReservationByPassenger(String passengerId, String from, String to, String flightNo) {
+		List<Reservation> resList = new ArrayList<Reservation>();
+		return resList;
 	}
 
 }

@@ -1,4 +1,6 @@
 package edu.sjsu.cmpe275.lab2.dao;
+import java.text.ParseException;
+
 import edu.sjsu.cmpe275.lab2.models.Flight;
 
 public interface FlightDao {
@@ -20,4 +22,6 @@ public interface FlightDao {
 	 * @return
 	 */
 	boolean deleteFlight(String flightNumber);
+
+	Flight updateFlight(Flight flights) throws ParseException;
 }

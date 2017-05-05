@@ -3,15 +3,9 @@ package edu.sjsu.cmpe275.lab2.controllers;
 import java.text.*;
 
 
-
-import javax.swing.text.StringContent;
-
-import org.json.JSONObject;
-import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-//import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.dao.FlightDao;
-import edu.sjsu.cmpe275.lab2.controllers.Response;
 import edu.sjsu.cmpe275.lab2.models.Flight;
-//import edu.sjsu.cmpe275.lab2.models.Passenger;
 import edu.sjsu.cmpe275.lab2.models.Plane;
 
 @RestController
@@ -34,11 +26,7 @@ public class FlightController {
 	FlightDao fltDao;
 	
 	
-	/*
-	 * url params= price=120&from=AA&to=BB&departureTime=CC&
-	 * arrivalTime=DD&description=EE&capacity=GG&
-	 * model=HH&manufacturer=II&yearOfManufacture=1997
-	 */
+	
 	/**
 	 * @param flightNumber
 	 * @param price
@@ -91,10 +79,16 @@ public class FlightController {
 		
 		f.setPlane(p);
 		
-		Flight flt = fltDao.createFlight(f);
-
+		Flight flight = fltDao.getFlight(flightNumber);
+		if(flight == null){
+			Flight flt = fltDao.createFlight(f);
+			return ResponseEntity.ok(flt);
+		} else{
+			Flight flt = fltDao.updateFlight(f);
+			return ResponseEntity.ok(flt);
+		}
 		
-		return ResponseEntity.ok(flt);
+		
 	}	
 
 	/**
@@ -127,8 +121,6 @@ public class FlightController {
 	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deletePassenger(@PathVariable("flightNumber") String flightNumber) {
 		HttpHeaders httpHeaders= new HttpHeaders();
-		Response res = new Response();
-
 		if (fltDao.deleteFlight(flightNumber)){
 			httpHeaders.setContentType(MediaType.APPLICATION_XML);
 			String resp = "<Response> <code> 200 </code> <msg> Flight with number "+flightNumber+" is deleted successfully  </msg> </Response>";

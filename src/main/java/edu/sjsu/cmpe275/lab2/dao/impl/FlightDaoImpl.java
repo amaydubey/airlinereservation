@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.lab2.dao.impl;
 
+import java.text.ParseException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -62,6 +64,29 @@ public class FlightDaoImpl implements FlightDao{
 			return false;
 		}
 		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.sjsu.cmpe275.lab2.dao.FlightDao#updateFlight(edu.sjsu.cmpe275.lab2.models.Flight)
+	 */
+	@Override
+	public Flight updateFlight(Flight flight) throws ParseException {
+		Flight flt = getFlight(flight.getNumber());
+		flt.setPrice(flight.getPrice());
+		flt.setFrom(flight.getFrom());
+		flt.setTo(flight.getTo());
+		flt.setDepartureTime(flight.getDepartureTime());
+		flt.setArrivalTime(flight.getArrivalTime());
+		flt.setDescription(flight.getDescription());
+		flt.setSeatsLeft(flight.getSeatsLeft());
+		try {
+			if(flt!=null){
+				entityManager.merge(flt);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flt;
 	}
 
 

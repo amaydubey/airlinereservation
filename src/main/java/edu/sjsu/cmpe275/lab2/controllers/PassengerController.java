@@ -46,6 +46,7 @@ public class PassengerController {
 	 * @param model
 	 * @return Passenger which is created
 	 */
+	@SuppressWarnings("finally")
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> createPassenger(@RequestParam("firstname") String firstname,
@@ -63,13 +64,16 @@ public class PassengerController {
 
 		try{
 			Passenger p1 = passDao.createPassenger(p);
-			List<Reservation> l = p.getReservations();
+			try{
+				List<Reservation> l = p.getReservations();
+			
 			for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
 				Reservation reservation = (Reservation) iterator.next();
 				reservation.setPassenger(null);
 			}
+			} finally {
 			return ResponseEntity.ok(p1);
-
+			}
 		}
 		catch(Exception e){
 			HttpHeaders httpHeaders= new HttpHeaders();
@@ -196,6 +200,7 @@ public class PassengerController {
 	 * @param model
 	 * @return Passenger which is updated
 	 */
+	@SuppressWarnings("finally")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> updatePassenger(@PathVariable("id") String id,
@@ -217,13 +222,16 @@ public class PassengerController {
 		
 		try{
 			Passenger p1 = passDao.updatePassenger(p);
-			List<Reservation> l = p.getReservations();
+			try{
+				List<Reservation> l = p.getReservations();
+			
 			for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
 				Reservation reservation = (Reservation) iterator.next();
 				reservation.setPassenger(null);
 			}
+			} finally{
 			return ResponseEntity.ok(p1);
-
+			}
 		}
 		catch(Exception e){
 			HttpHeaders httpHeaders= new HttpHeaders();

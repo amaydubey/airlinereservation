@@ -3,10 +3,14 @@ package edu.sjsu.cmpe275.lab2.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
 
 
@@ -23,7 +27,7 @@ public class Flight {
 	@Id
     @Basic(optional = false)
 	@Column(name = "flightNo",unique=true, nullable = false)
-	private String number; // Each flight has a unique flight number.
+	private String flightNumber; // Each flight has a unique flight number.
 	
 	@Column(name = "price")
 	private int price;
@@ -52,20 +56,21 @@ public class Flight {
 	private String description;
 	
 	private Plane plane; // Embedded
+
 //	private List<Passenger> passengers;
 
 	/**
 	 * @return No of the flight
 	 */
 	public String getNumber() {
-		return number;
+		return flightNumber;
 	}
 
 	/**
 	 * @param number
 	 */
-	public void setNumber(String number) {
-		this.number = number;
+	public void setNumber(String flightNumber) {
+		this.flightNumber = flightNumber;
 	}
 
 	/**
@@ -190,9 +195,9 @@ public class Flight {
 		this.plane = plane;
 	}
 
-	/**
-	 * @return List of the passengers of the flight
-	 */
+//	/**
+//	 * @return List of the passengers of the flight
+//	 */
 //	public List<Passenger> getPassengers() {
 //		return passengers;
 //	}

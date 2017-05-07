@@ -64,7 +64,7 @@ public class PassengerController {
 	 * @param id
 	 * @return Passenger which is requested
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE, params = "xml")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE, params = "xml=true")
 	public ResponseEntity<Passenger> getPassengerInXml(@PathVariable("id") String id) {
 		Passenger p = passDao.getPassenger(id);
 		return ResponseEntity.ok(p);

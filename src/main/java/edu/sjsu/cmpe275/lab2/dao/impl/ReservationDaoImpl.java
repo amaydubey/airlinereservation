@@ -1,10 +1,12 @@
 package edu.sjsu.cmpe275.lab2.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.sjsu.cmpe275.lab2.dao.ReservationDao;
 import edu.sjsu.cmpe275.lab2.models.Flight;
 import edu.sjsu.cmpe275.lab2.models.Passenger;
+import edu.sjsu.cmpe275.lab2.models.PassengerReservation;
 import edu.sjsu.cmpe275.lab2.models.Reservation;
 
 /**
@@ -58,6 +61,9 @@ public class ReservationDaoImpl implements ReservationDao {
 
 		try {
 			r = entityManager.find(Reservation.class, number);
+			System.out.println("**********************Passenger:" + r.getPassenger().getId());
+			System.out.println("**********************Passenger:" + r.getPassenger().getFirstname());
+			System.out.println("**********************Passenger:" + r.getPassenger().getLastname());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,8 +103,20 @@ public class ReservationDaoImpl implements ReservationDao {
 	}
 
 	@Override
-	public List<Reservation> searchReservationByPassenger(String passengerId, String from, String to, String flightNo) {
+	public List<Reservation> searchReservation(String passengerId, String from, String to, String flightNo) {
 		List<Reservation> resList = new ArrayList<Reservation>();
+		Reservation r;
+		Query query = entityManager.createQuery("Select * from passenger_reservation emp where passenger_reservation.passengerId = :passengerId or passenger_reservation.source = :source or passenger_reservation.destination = :destination or destination.flightNo = :flightNo");
+		query.setParameter("passengerId", passengerId);
+		query.setParameter("source", from);
+		query.setParameter("destination", to);
+		query.setParameter("flightNo", flightNo);
+		List<?> prList = query.getResultList();
+		for (Iterator<?> iterator = prList.iterator(); iterator.hasNext();) {
+			PassengerReservation passengerReservation = (PassengerReservation) iterator.next();
+			r = getReservation(passengerReservation.getOrderId());
+			resList.add(r);
+		}
 		return resList;
 	}
 

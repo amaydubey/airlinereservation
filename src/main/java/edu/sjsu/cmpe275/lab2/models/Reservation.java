@@ -15,12 +15,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * @author amayd
  *
  */
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="orderNumber")
 @Entity
 @Table(name="reservation")
 public class Reservation {
@@ -33,7 +35,7 @@ public class Reservation {
 
 	@ManyToOne
 	@JoinColumn(name="passengerId")
-	@JsonBackReference
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 	private Passenger passenger;
 
 	@Column(name = "price")
@@ -62,6 +64,7 @@ public class Reservation {
 	/**
 	 * @return Passenger on the reservation
 	 */
+	@JsonProperty
 	public Passenger getPassenger() {
 		return passenger;
 	}

@@ -38,6 +38,6 @@ public interface ReservationDao {
 	 * @param flightNo
 	 * @return A list of reservations with the provided attributes
 	 */
-	public List<Reservation> searchReservationByPassenger(String passengerId, String from, String to, String flightNo);
+	public List<Reservation> searchReservation(String passengerId, String from, String to, String flightNo);
 
 }

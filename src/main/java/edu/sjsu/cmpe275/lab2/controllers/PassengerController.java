@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe275.lab2.controllers;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.dao.PassengerDao;
 import edu.sjsu.cmpe275.lab2.models.Passenger;
+import edu.sjsu.cmpe275.lab2.models.Reservation;
 
 /**
  * @author amayd
@@ -47,6 +51,11 @@ public class PassengerController {
 		p.setGender(gender);
 		p.setPhone(phone);
 		Passenger p1 = passDao.createPassenger(p);
+		List<Reservation> l = p.getReservations();
+		for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+			Reservation reservation = (Reservation) iterator.next();
+			reservation.setPassenger(null);
+		}
 		return ResponseEntity.ok(p1);
 	}
 
@@ -57,6 +66,11 @@ public class PassengerController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, params = "json=true")
 	public ResponseEntity<Passenger> getPassengerInJson(@PathVariable("id") String id) {
 		Passenger p = passDao.getPassenger(id);
+		List<Reservation> l = p.getReservations();
+		for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+			Reservation reservation = (Reservation) iterator.next();
+			reservation.setPassenger(null);
+		}
 		return ResponseEntity.ok(p);
 	}
 
@@ -67,6 +81,11 @@ public class PassengerController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE, params = "xml=true")
 	public ResponseEntity<Passenger> getPassengerInXml(@PathVariable("id") String id) {
 		Passenger p = passDao.getPassenger(id);
+		List<Reservation> l = p.getReservations();
+		for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+			Reservation reservation = (Reservation) iterator.next();
+			reservation.setPassenger(null);
+		}
 		return ResponseEntity.ok(p);
 	}
 
@@ -107,6 +126,11 @@ public class PassengerController {
 		p.setGender(gender);
 		p.setPhone(phone);
 		Passenger p1 = passDao.updatePassenger(p);
+		List<Reservation> l = p.getReservations();
+		for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+			Reservation reservation = (Reservation) iterator.next();
+			reservation.setPassenger(null);
+		}
 		return ResponseEntity.ok(p1);
 	}
 

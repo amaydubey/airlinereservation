@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe275.lab2.controllers;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,7 @@ public class ReservationController {
 	public ResponseEntity<Reservation> makeReservation(@RequestParam("passengerId") String passengerId,
 			@RequestParam("flightLists") String flightLists) {
 		Reservation r = resDao.makeReservation(passengerId, flightLists);
+		r.getPassenger().setReservations(null);
 		return ResponseEntity.ok(r);
 	}
 
@@ -45,6 +49,8 @@ public class ReservationController {
 	@ResponseBody
 	public ResponseEntity<Reservation> getReservation(@PathVariable("number") String number) {
 		Reservation r = resDao.getReservation(number);
+		System.out.println("********Passenger in controller: " + r.getPassenger().getFirstname());
+		r.getPassenger().setReservations(null);
 		return ResponseEntity.ok(r);
 	}
 
@@ -59,6 +65,21 @@ public class ReservationController {
 	public ResponseEntity<Reservation> updateReservation(@PathVariable("number") String number,
 			@RequestParam("flightsAdded") String flightsAdded, @RequestParam("flightsRemoved") String flightsRemoved) {
 		Reservation r = resDao.updateReservation(number, flightsAdded, flightsRemoved);
+		r.getPassenger().setReservations(null);
+		return ResponseEntity.ok(r);
+	}
+	
+	/**
+	 * @param passengerId
+	 * @param from
+	 * @param to
+	 * @param flightNumber
+	 * @return List of flights matching the criteria
+	 */
+	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_XML_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<Reservation>> searchReservation(@RequestParam("passengerId") String passengerId, @RequestParam("from") String from, @RequestParam("to") String to, @RequestParam("flightNumber") String flightNumber) {
+		List<Reservation> r = resDao.searchReservation(passengerId, from, to, flightNumber);
 		return ResponseEntity.ok(r);
 	}
 

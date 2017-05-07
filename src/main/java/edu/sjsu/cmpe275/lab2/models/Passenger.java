@@ -13,7 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * @author amayd
@@ -40,7 +43,7 @@ public class Passenger {
 	private String phone; // Phone numbers must be unique
 	
 	@OneToMany(mappedBy="passenger", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 	private List<Reservation> reservations;
 
 	/**

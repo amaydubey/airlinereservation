@@ -5,6 +5,10 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import org.json.XML;
+
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.dao.PassengerDao;
 import edu.sjsu.cmpe275.lab2.models.Passenger;
- 
+
+import edu.sjsu.cmpe275.lab2.models.Reservation;
+
 /**
  * @author amayd
  *
@@ -57,6 +63,11 @@ public class PassengerController {
 
 		try{
 			Passenger p1 = passDao.createPassenger(p);
+			List<Reservation> l = p.getReservations();
+			for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+				Reservation reservation = (Reservation) iterator.next();
+				reservation.setPassenger(null);
+			}
 			return ResponseEntity.ok(p1);
 
 		}
@@ -73,6 +84,7 @@ public class PassengerController {
 			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 			return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
 		}	
+
 	}
 
 	/**
@@ -83,8 +95,15 @@ public class PassengerController {
 	public ResponseEntity<?> getPassengerInXml(@PathVariable("id") String id) {
 		Passenger p = passDao.getPassenger(id);
 		HttpHeaders httpHeaders= new HttpHeaders();
+		
+	
 
 		if(p!= null){
+			List<Reservation> l = p.getReservations();
+			for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+				Reservation reservation = (Reservation) iterator.next();
+				reservation.setPassenger(null);
+			}
 			return ResponseEntity.ok(p);
 
 		}else{
@@ -110,8 +129,12 @@ public class PassengerController {
 		HttpHeaders httpHeaders= new HttpHeaders();
 
 		if(p!= null){
+			List<Reservation> l = p.getReservations();
+			for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+				Reservation reservation = (Reservation) iterator.next();
+				reservation.setPassenger(null);
+			}
 			return ResponseEntity.ok(p);
-
 		}else{
 			Map<String, Object> message = new HashMap<String, Object>();
 			Map<String, Object> response = new HashMap<String, Object>();
@@ -124,6 +147,7 @@ public class PassengerController {
 			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 			return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
 		}
+
 	}
 
 	
@@ -193,6 +217,11 @@ public class PassengerController {
 		
 		try{
 			Passenger p1 = passDao.updatePassenger(p);
+			List<Reservation> l = p.getReservations();
+			for (Iterator<Reservation> iterator = l.iterator(); iterator.hasNext();) {
+				Reservation reservation = (Reservation) iterator.next();
+				reservation.setPassenger(null);
+			}
 			return ResponseEntity.ok(p1);
 
 		}

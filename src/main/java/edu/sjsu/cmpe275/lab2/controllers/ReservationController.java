@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
+import java.util.Iterator;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,6 +42,7 @@ public class ReservationController {
 	public ResponseEntity<Reservation> makeReservation(@RequestParam("passengerId") String passengerId,
 			@RequestParam("flightLists") String flightLists) {
 		Reservation r = resDao.makeReservation(passengerId, flightLists);
+		r.getPassenger().setReservations(null);
 		return ResponseEntity.ok(r);
 	}
 
@@ -54,19 +57,21 @@ public class ReservationController {
 		HttpHeaders httpHeaders= new HttpHeaders();
 
 		if(r!= null){		
-		return ResponseEntity.ok(r);
-		} else{
-			Map<String, Object> message = new HashMap<String, Object>();
-			Map<String, Object> response = new HashMap<String, Object>();
-			message.put("code", "404");
-			message.put("msg", "Sorry, the requested reservation number "+number+" does not exist");
-			response.put("BadRequest", message);
-			JSONObject json_test = new JSONObject(response);
-			String json_resp = json_test.toString();
-			
-			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
-		}
+
+			r.getPassenger().setReservations(null);
+			return ResponseEntity.ok(r);
+			} else{
+				Map<String, Object> message = new HashMap<String, Object>();
+				Map<String, Object> response = new HashMap<String, Object>();
+				message.put("code", "404");
+				message.put("msg", "Sorry, the requested reservation number "+number+" does not exist");
+				response.put("BadRequest", message);
+				JSONObject json_test = new JSONObject(response);
+				String json_resp = json_test.toString();
+				
+				httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+				return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+			}
 	}
 
 	/**
@@ -80,6 +85,21 @@ public class ReservationController {
 	public ResponseEntity<Reservation> updateReservation(@PathVariable("number") String number,
 			@RequestParam("flightsAdded") String flightsAdded, @RequestParam("flightsRemoved") String flightsRemoved) {
 		Reservation r = resDao.updateReservation(number, flightsAdded, flightsRemoved);
+		r.getPassenger().setReservations(null);
+		return ResponseEntity.ok(r);
+	}
+	
+	/**
+	 * @param passengerId
+	 * @param from
+	 * @param to
+	 * @param flightNumber
+	 * @return List of flights matching the criteria
+	 */
+	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_XML_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<Reservation>> searchReservation(@RequestParam("passengerId") String passengerId, @RequestParam("from") String from, @RequestParam("to") String to, @RequestParam("flightNumber") String flightNumber) {
+		List<Reservation> r = resDao.searchReservation(passengerId, from, to, flightNumber);
 		return ResponseEntity.ok(r);
 	}
 

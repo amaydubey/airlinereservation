@@ -57,7 +57,6 @@ public class FlightDaoImpl implements FlightDao{
 			for (Iterator<?> iterator = prList.iterator(); iterator.hasNext();) {
 				String passengerId = (String) iterator.next();
 				p = entityManager.find(Passenger.class, passengerId);
-				System.out.println("Passenger: " + p.getFirstname());
 				p.setReservations(null);
 				passengerList.add(p);
 			}

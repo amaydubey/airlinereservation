@@ -42,22 +42,22 @@ public class ReservationController {
 	public ResponseEntity<?> makeReservation(@RequestParam("passengerId") String passengerId,
 			@RequestParam("flightLists") String flightLists) {
 		Reservation r = resDao.makeReservation(passengerId, flightLists);
-		HttpHeaders httpHeaders= new HttpHeaders();
-		if(r!= null){
+		HttpHeaders httpHeaders = new HttpHeaders();
+		if (r != null) {
 			r.getPassenger().setReservations(null);
 			return ResponseEntity.ok(r);
-		} else{
-			Map<String, Object> message = new HashMap<String, Object>();
-			Map<String, Object> response = new HashMap<String, Object>();
-			message.put("code", "400");
-			message.put("msg", "Sorry, the requested passenger id "+passengerId+" or flight lists "+flightLists+" does not exist");
-			response.put("BadRequest", message);
-			JSONObject json_test = new JSONObject(response);
-			String json_resp = json_test.toString();
-			
-			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
 		}
+		Map<String, Object> message = new HashMap<String, Object>();
+		Map<String, Object> response = new HashMap<String, Object>();
+		message.put("code", "400");
+		message.put("msg", "Sorry, the requested passenger id " + passengerId + " or flight lists " + flightLists
+				+ " does not exist");
+		response.put("BadRequest", message);
+		JSONObject json_test = new JSONObject(response);
+		String json_resp = json_test.toString();
+
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		return new ResponseEntity<String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
 	}
 
 	/**
@@ -94,28 +94,28 @@ public class ReservationController {
 	 * @param flightsRemoved
 	 * @return Updated Reservation
 	 */
-	@RequestMapping(value = "/{number}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{number}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> updateReservation(@PathVariable("number") String number,
 			@RequestParam("flightsAdded") String flightsAdded, @RequestParam("flightsRemoved") String flightsRemoved) {
 		Reservation r = resDao.updateReservation(number, flightsAdded, flightsRemoved);
 		r.getPassenger().setReservations(null);
-		HttpHeaders httpHeaders= new HttpHeaders();
+		HttpHeaders httpHeaders = new HttpHeaders();
 
-		if(r!= null){
+		if (r != null) {
 			return ResponseEntity.ok(r);
 		}
-			Map<String, Object> message = new HashMap<String, Object>();
-			Map<String, Object> response = new HashMap<String, Object>();
-			message.put("code", "404");
-			message.put("msg", "Sorry, the requested reservation number "+number+" does not exist");
-			response.put("BadRequest", message);
-			JSONObject json_test = new JSONObject(response);
-			String json_resp = json_test.toString();
-			
-			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
-		
+		Map<String, Object> message = new HashMap<String, Object>();
+		Map<String, Object> response = new HashMap<String, Object>();
+		message.put("code", "404");
+		message.put("msg", "Sorry, the requested reservation number " + number + " does not exist");
+		response.put("BadRequest", message);
+		JSONObject json_test = new JSONObject(response);
+		String json_resp = json_test.toString();
+
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		return new ResponseEntity<String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+
 	}
 
 	/**

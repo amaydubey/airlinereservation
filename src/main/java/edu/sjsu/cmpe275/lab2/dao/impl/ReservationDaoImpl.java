@@ -106,7 +106,7 @@ public class ReservationDaoImpl implements ReservationDao {
 	public List<Reservation> searchReservation(String passengerId, String from, String to, String flightNo) {
 		List<Reservation> resList = new ArrayList<Reservation>();
 		Reservation r;
-		Query query = entityManager.createQuery("Select * from passenger_reservation emp where passenger_reservation.passengerId = :passengerId or passenger_reservation.source = :source or passenger_reservation.destination = :destination or destination.flightNo = :flightNo");
+		Query query = entityManager.createQuery("SELECT orderId FROM passenger_reservation pr WHERE pr.passengerId = :passengerId OR pr.source = :source OR pr.destination = :destination OR pr.flightNo = :flightNo");
 		query.setParameter("passengerId", passengerId);
 		query.setParameter("source", from);
 		query.setParameter("destination", to);

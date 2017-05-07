@@ -14,8 +14,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "passenger_reservation")
 public class PassengerReservation {
+
 	@Id
-	@Column(name = "passengerId")
+	@Column(name = "passengerId", unique=false, nullable = false)
 	private String passengerId;
 	
 	@Column(name = "firstName")

@@ -14,8 +14,9 @@ public interface PassengerDao {
 	/**
 	 * @param passenger
 	 * @return Newly created passenger
+	 * @throws Exception 
 	 */
-	Passenger createPassenger(Passenger passenger);
+	Passenger createPassenger(Passenger passenger) throws Exception;
 	
 	/**
 	 * @param id

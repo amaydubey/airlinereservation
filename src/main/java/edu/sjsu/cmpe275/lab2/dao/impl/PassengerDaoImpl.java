@@ -23,7 +23,7 @@ public class PassengerDaoImpl implements PassengerDao {
 	private EntityManager entityManager;
 
 	@Override
-	public Passenger createPassenger(Passenger p) {
+	public Passenger createPassenger(Passenger p) throws Exception {
 		try {
 			entityManager.persist(p);
 		} catch (Exception e) {
@@ -35,11 +35,9 @@ public class PassengerDaoImpl implements PassengerDao {
 	@Override
 	public Passenger getPassenger(String id) {
 		Passenger p = null;
-		try {
+		
 			p = entityManager.find(Passenger.class, id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		return p;
 	}
 

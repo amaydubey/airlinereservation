@@ -1,8 +1,11 @@
 package edu.sjsu.cmpe275.lab2.controllers;
 
 import java.text.*;
+import java.util.HashMap;
+import java.util.Map;
 
-
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -95,11 +98,25 @@ public class FlightController {
 	 * @param flightNumber
 	 * @return get flight with planes and passengers in XML
 	 */
-	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE, params = "xml")
-	public ResponseEntity<Flight> getFlightInXml(@PathVariable("flightNumber") String flightNumber) {
+	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE, params = "xml=true")
+	public ResponseEntity<?> getFlightInXml(@PathVariable("flightNumber") String flightNumber) {
 		Flight flt = fltDao.getFlight(flightNumber);
-		return ResponseEntity.ok(flt);
+		HttpHeaders httpHeaders= new HttpHeaders();
 		
+		if(flt!= null){
+			return ResponseEntity.ok(flt);
+			} else{
+				Map<String, Object> message = new HashMap<String, Object>();
+				Map<String, Object> response = new HashMap<String, Object>();
+				message.put("code", "404");
+				message.put("msg", "Sorry, the requested flight with number "+flightNumber+" does not exist");
+				response.put("BadRequest", message);
+				JSONObject json_test = new JSONObject(response);
+				String json_resp = json_test.toString();
+				
+				httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+				return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+			}
 	}
 	
 	
@@ -107,11 +124,25 @@ public class FlightController {
 	 * @param flightNumber
 	 * @return get flight with planes and passengers in JSON 
 	 */
-	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, params = "json")
-	public ResponseEntity<Flight> getFlightInJson(@PathVariable("flightNumber") String flightNumber) {
+	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getFlightInJson(@PathVariable("flightNumber") String flightNumber) {
 		Flight flt = fltDao.getFlight(flightNumber);
-		return ResponseEntity.ok(flt);
+		HttpHeaders httpHeaders= new HttpHeaders();
 		
+		if(flt!= null){
+			return ResponseEntity.ok(flt);
+			} else{
+				Map<String, Object> message = new HashMap<String, Object>();
+				Map<String, Object> response = new HashMap<String, Object>();
+				message.put("code", "404");
+				message.put("msg", "Sorry, the requested flight with number "+flightNumber+" does not exist");
+				response.put("BadRequest", message);
+				JSONObject json_test = new JSONObject(response);
+				String json_resp = json_test.toString();
+				
+				httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+				return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+			}
 	}
 	
 	/**
@@ -120,22 +151,33 @@ public class FlightController {
 	 */
 	@RequestMapping(value = "/{flightNumber}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deletePassenger(@PathVariable("flightNumber") String flightNumber) {
+		
 		HttpHeaders httpHeaders= new HttpHeaders();
+		Map<String, Object> message = new HashMap<String, Object>();
+		Map<String, Object> response = new HashMap<String, Object>();
+		
 		if (fltDao.deleteFlight(flightNumber)){
+			message.put("code", "200");
+			message.put("msg", "Passenger with number "+flightNumber+" is deleted successfully");
+			response.put("BadRequest", message);
+			JSONObject json_test = new JSONObject(response);
+			String xml_resp = XML.toString(json_test);
 			httpHeaders.setContentType(MediaType.APPLICATION_XML);
-			String resp = "<Response> <code> 200 </code> <msg> Flight with number "+flightNumber+" is deleted successfully  </msg> </Response>";
-			return new ResponseEntity<String>(resp, httpHeaders, HttpStatus.OK);
-			
-			
-			
 
+			return new ResponseEntity<String>(xml_resp, httpHeaders, HttpStatus.OK);
+			
+			
 		}
 		else{
+			message.put("code", "404");
+			message.put("msg", "Sorry, the requested flight with number "+flightNumber+" does not exist");
+			response.put("BadRequest", message);
+			JSONObject json_test = new JSONObject(response);
+			String json_resp = json_test.toString();
 			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-			String response = "{\"BadRequest\": {\"code\": \"404\" , \"msg\" : \"Flight number not found\" } }";
-			return new ResponseEntity<String>(response, httpHeaders, HttpStatus.NOT_FOUND);
-
+			return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+			
 		}
 	}
 

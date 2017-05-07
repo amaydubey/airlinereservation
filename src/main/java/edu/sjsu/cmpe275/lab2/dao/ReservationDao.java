@@ -40,4 +40,12 @@ public interface ReservationDao {
 	 */
 	public List<Reservation> searchReservation(String passengerId, String from, String to, String flightNo);
 
+	/**
+	 * @param orderId
+	 * @return True on successful deletion, false otherwise
+	 */
+	public boolean deleteReservation(String orderId);
+	
+	
+
 }

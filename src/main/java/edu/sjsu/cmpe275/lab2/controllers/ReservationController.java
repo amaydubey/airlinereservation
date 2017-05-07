@@ -1,11 +1,11 @@
 package edu.sjsu.cmpe275.lab2.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
-import java.util.Iterator;
-import java.util.List;
+import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,31 +47,31 @@ public class ReservationController {
 	}
 
 	/**
-	 * @param number 
+	 * @param number
 	 * @return The requested reservation
 	 */
 	@RequestMapping(value = "/{number}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> getReservation(@PathVariable("number") String number) {
 		Reservation r = resDao.getReservation(number);
-		HttpHeaders httpHeaders= new HttpHeaders();
+		HttpHeaders httpHeaders = new HttpHeaders();
 
-		if(r!= null){		
+		if (r != null) {
 
 			r.getPassenger().setReservations(null);
 			return ResponseEntity.ok(r);
-			} else{
-				Map<String, Object> message = new HashMap<String, Object>();
-				Map<String, Object> response = new HashMap<String, Object>();
-				message.put("code", "404");
-				message.put("msg", "Sorry, the requested reservation number "+number+" does not exist");
-				response.put("BadRequest", message);
-				JSONObject json_test = new JSONObject(response);
-				String json_resp = json_test.toString();
-				
-				httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-				return new ResponseEntity <String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
-			}
+		} else {
+			Map<String, Object> message = new HashMap<String, Object>();
+			Map<String, Object> response = new HashMap<String, Object>();
+			message.put("code", "404");
+			message.put("msg", "Sorry, the requested reservation number " + number + " does not exist");
+			response.put("BadRequest", message);
+			JSONObject json_test = new JSONObject(response);
+			String json_resp = json_test.toString();
+
+			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+			return new ResponseEntity<String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+		}
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class ReservationController {
 		r.getPassenger().setReservations(null);
 		return ResponseEntity.ok(r);
 	}
-	
+
 	/**
 	 * @param passengerId
 	 * @param from
@@ -98,9 +98,44 @@ public class ReservationController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Reservation>> searchReservation(@RequestParam("passengerId") String passengerId, @RequestParam("from") String from, @RequestParam("to") String to, @RequestParam("flightNumber") String flightNumber) {
+	public ResponseEntity<List<Reservation>> searchReservation(@RequestParam("passengerId") String passengerId,
+			@RequestParam("from") String from, @RequestParam("to") String to,
+			@RequestParam("flightNumber") String flightNumber) {
 		List<Reservation> r = resDao.searchReservation(passengerId, from, to, flightNumber);
 		return ResponseEntity.ok(r);
+	}
+
+	/**
+	 * @param orderId
+	 * @return 200 on successful deletion, 404 on failure
+	 */
+	@RequestMapping(value = "/{number}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteReservation(@PathVariable("number") String orderId) {
+
+		Map<String, Object> message = new HashMap<String, Object>();
+		Map<String, Object> response = new HashMap<String, Object>();
+		HttpHeaders httpHeaders = new HttpHeaders();
+
+		if (resDao.deleteReservation(orderId)) {
+			message.put("code", "200");
+			message.put("msg", "Reservation with number " + orderId + " is deleted successfully");
+			response.put("BadRequest", message);
+			JSONObject json_test = new JSONObject(response);
+			String xml_resp = XML.toString(json_test);
+			httpHeaders.setContentType(MediaType.APPLICATION_XML);
+
+			return new ResponseEntity<String>(xml_resp, httpHeaders, HttpStatus.OK);
+		} else {
+			message.put("code", "404");
+			message.put("msg", "Sorry, the requested reservation with number " + orderId + " does not exist");
+			response.put("BadRequest", message);
+			JSONObject json_test = new JSONObject(response);
+			String json_resp = json_test.toString();
+			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+			return new ResponseEntity<String>(json_resp, httpHeaders, HttpStatus.NOT_FOUND);
+		}
+
 	}
 
 }

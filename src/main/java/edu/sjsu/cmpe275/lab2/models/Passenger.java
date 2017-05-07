@@ -43,7 +43,7 @@ public class Passenger {
 	private String phone; // Phone numbers must be unique
 	
 	@OneToMany(mappedBy="passenger", cascade = CascadeType.ALL)
-	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="orderId")
 	private List<Reservation> reservations;
 
 	/**

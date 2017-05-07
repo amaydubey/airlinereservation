@@ -7,13 +7,10 @@ import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Table;
-
-
 
 /**
  * @author ashay
@@ -22,19 +19,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "flight")
 public class Flight {
-	
-	
+
 	@Id
-    @Basic(optional = false)
-	@Column(name = "flightNo",unique=true, nullable = false)
+	@Basic(optional = false)
+	@Column(name = "flightNo", unique = true, nullable = false)
 	private String flightNumber; // Each flight has a unique flight number.
-	
+
 	@Column(name = "price")
 	private int price;
-	
+
 	@Column(name = "source")
 	private String from;
-	
+
 	@Column(name = "destination")
 	private String to;
 
@@ -45,19 +41,21 @@ public class Flight {
 	 */
 	@Column(name = "departureTime")
 	private Date departureTime;
-	
+
 	@Column(name = "arrivalTime")
 	private Date arrivalTime;
-	
+
 	@Column(name = "seatsLeft")
 	private int seatsLeft;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	private Plane plane; // Embedded
 
-//	private List<Passenger> passengers;
+	@Column
+	@ElementCollection(targetClass = Passenger.class)
+	private List<Passenger> passengers;
 
 	/**
 	 * @return No of the flight
@@ -67,7 +65,7 @@ public class Flight {
 	}
 
 	/**
-	 * @param number
+	 * @param flightNumber
 	 */
 	public void setNumber(String flightNumber) {
 		this.flightNumber = flightNumber;
@@ -126,12 +124,12 @@ public class Flight {
 
 	/**
 	 * @param departureTime
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public void setDepartureTime(String departureTime) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		Date departure = sdf.parse(departureTime);
-		
+
 		this.departureTime = departure;
 	}
 
@@ -147,7 +145,7 @@ public class Flight {
 	/**
 	 * @param arrivalTime
 	 */
-	public void setArrivalTime(String arrivalTime)throws ParseException {
+	public void setArrivalTime(String arrivalTime) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
 		Date arrival = sdf.parse(arrivalTime);
 		this.arrivalTime = arrival;
@@ -195,17 +193,17 @@ public class Flight {
 		this.plane = plane;
 	}
 
-//	/**
-//	 * @return List of the passengers of the flight
-//	 */
-//	public List<Passenger> getPassengers() {
-//		return passengers;
-//	}
-//
-//	/**
-//	 * @param passengers
-//	 */
-//	public void setPassengers(List<Passenger> passengers) {
-//		this.passengers = passengers;
-//	}
+	/**
+	 * @return List of the passengers of the flight
+	 */
+	public List<Passenger> getPassengers() {
+		return passengers;
+	}
+
+	/**
+	 * @param passengers
+	 */
+	public void setPassengers(List<Passenger> passengers) {
+		this.passengers = passengers;
+	}
 }

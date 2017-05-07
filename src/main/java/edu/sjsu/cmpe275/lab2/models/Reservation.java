@@ -35,7 +35,7 @@ public class Reservation {
 
 	@ManyToOne
 	@JoinColumn(name="passengerId")
-	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="passengerId")
 	private Passenger passenger;
 
 	@Column(name = "price")

@@ -1,9 +1,13 @@
 package edu.sjsu.cmpe275.lab2.dao.impl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -11,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.sjsu.cmpe275.lab2.dao.FlightDao;
 import edu.sjsu.cmpe275.lab2.models.Flight;
+import edu.sjsu.cmpe275.lab2.models.Passenger;
 
 /**
  * @author ashay
@@ -41,10 +46,22 @@ public class FlightDaoImpl implements FlightDao{
 	 */
 	@Override
 	public Flight getFlight(String flightNumber) {
-		// TODO Auto-generated method stub
 		Flight flight = null;
+		Passenger p;
 		try {
 			flight = entityManager.find(Flight.class, flightNumber);
+			List<Passenger> passengerList = new ArrayList<Passenger>();
+			Query query = entityManager.createQuery("SELECT passengerId FROM PassengerReservation pr WHERE pr.flightNo = :flightNumber");
+			query.setParameter("flightNumber", flightNumber);
+			List<?> prList = query.getResultList();
+			for (Iterator<?> iterator = prList.iterator(); iterator.hasNext();) {
+				String passengerId = (String) iterator.next();
+				p = entityManager.find(Passenger.class, passengerId);
+				System.out.println("Passenger: " + p.getFirstname());
+				p.setReservations(null);
+				passengerList.add(p);
+			}
+			flight.setPassengers(passengerList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -106,18 +106,30 @@ public class ReservationDaoImpl implements ReservationDao {
 	public List<Reservation> searchReservation(String passengerId, String from, String to, String flightNo) {
 		List<Reservation> resList = new ArrayList<Reservation>();
 		Reservation r;
-		Query query = entityManager.createQuery("SELECT orderId FROM passenger_reservation pr WHERE pr.passengerId = :passengerId OR pr.source = :source OR pr.destination = :destination OR pr.flightNo = :flightNo");
+		Query query = entityManager.createQuery("SELECT orderId FROM PassengerReservation pr WHERE pr.passengerId = :passengerId OR pr.source = :source OR pr.destination = :destination OR pr.flightNo = :flightNo");
 		query.setParameter("passengerId", passengerId);
 		query.setParameter("source", from);
 		query.setParameter("destination", to);
 		query.setParameter("flightNo", flightNo);
 		List<?> prList = query.getResultList();
+		System.out.println("PR: "+prList);
 		for (Iterator<?> iterator = prList.iterator(); iterator.hasNext();) {
-			PassengerReservation passengerReservation = (PassengerReservation) iterator.next();
-			r = getReservation(passengerReservation.getOrderId());
+			String orderId = (String) iterator.next();
+			r = getReservation(orderId);
 			resList.add(r);
 		}
 		return resList;
+	}
+
+	@Override
+	public boolean deleteReservation(String orderId) {
+		Reservation r = getReservation(orderId);
+		if(r!=null){
+			entityManager.remove(r);
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 }

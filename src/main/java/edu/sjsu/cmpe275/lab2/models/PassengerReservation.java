@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -14,7 +15,8 @@ import javax.persistence.Table;
 @Table(name = "passenger_reservation")
 public class PassengerReservation {
 
-	@Column(name = "passengerId")
+	@Id
+	@Column(name = "passengerId", unique=false, nullable = false)
 	private String passengerId;
 	
 	@Column(name = "firstName")

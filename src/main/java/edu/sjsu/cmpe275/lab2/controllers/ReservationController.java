@@ -96,7 +96,7 @@ public class ReservationController {
 	 * @param flightNumber
 	 * @return List of flights matching the criteria
 	 */
-	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_XML_VALUE)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<Reservation>> searchReservation(@RequestParam("passengerId") String passengerId, @RequestParam("from") String from, @RequestParam("to") String to, @RequestParam("flightNumber") String flightNumber) {
 		List<Reservation> r = resDao.searchReservation(passengerId, from, to, flightNumber);
